@@ -23,31 +23,35 @@
       </div>
       <div class="mb-3">
         <label for="tipografia" class="form-label">Tipografía</label>
-        <select class="form-select">
-          <option v-for="tipo in tipografias" :key="tipo" id="tipografia">{{ tipo }}</option>
+
+        <select v-model="tipografiaElegida" class="form-select">
+
+          <option id="tipografia" v-for="tipo in tipografias" :key="tipo" :value="tipo" >{{ tipo }}</option>
+
         </select>
+
       </div>
       <div class="mb-3">
         <label class="me-2" for="mostrarOpaco">Opaco</label>
-        <input v-if="mostrarOpaco" v-model="textoConOpacidad" type="checkbox" name="" id="mostrarOpaco" @change="funcionOpacidad" />
+        <input v-model="mostrarOpaco" type="checkbox" id="mostrarOpaco" />
       </div>
       <div class="mb-3">
         <label class="me-2">Tamaño de letra</label>
         <div>
-          <input class="form-check-input mt-1" type="radio" value="small" id="small" name="size" v-model="small" @change="funcionSize" />
+          <input id="small" class="form-check-input mt-1" type="radio" value="small" name="size" v-model="tamanioLetra" />
           <label class="me-2 ms-2" for="small">Pequeño</label>
 
-          <input class="form-check-input mt-1" type="radio" value="mediano" id="mediano" name="size" v-model="medium" @change="funcionSize" />
+          <input id="medium" class="form-check-input mt-1" type="radio" value="medium" name="size" v-model="tamanioLetra" />
           <label class="me-2 ms-2" for="medium">Mediano</label>
 
-          <input class="form-check-input mt-1" type="radio" value="grande" id="grande" name="size" v-model="large" @change="funcionSize" />
+          <input id="large" class="form-check-input mt-1" type="radio" value="large" name="size" v-model="tamanioLetra" />
           <label class="me-2 ms-2" for="large">Grande</label>
         </div>
       </div>
     </div>
 
     <div class="border border-1 p-4 m-4 w-50 h-50" :style="{backgroundColor: colorFondo, borderRadius: rangoBorde}">
-        <p v-show="show" :style="{color: colorTexto, 'font-style': tipografias, opacity: opacidad, fontSize: size}">{{ mensaje }}</p>      
+        <p v-show="show" :style="{color: colorTexto, fontStyle: estiloFuente, opacity: esOpaco, fontSize: letraSize}">{{ mensaje }}</p>      
     </div>
 
   </div>
@@ -65,38 +69,37 @@ export default {
       bordeElegido: "",
       minimoBorde: "0",
       maximoBorde: "100",
-      tipografias: ["normal", "italic", "oblique"],
-      mostrarOpaco: true,
+      tipografias: ["normal", "italic", "oblique"],      
+      mostrarOpaco: "",
       opacidad: this.opacidad,
-      size: this.size,
-      small: true,
-      medium: true,
-      large: true,
+      tamanioLetra: "large",
+      tipografiaElegida: this.tipo,
     }
   },
-  methods: {
-    funcionOpacidad(){
-      if(this.mostrarOpaco===true){
-        this.opacidad = '0.5'
-      }else if (this.mostrarOpaco===false){
-        this.opacidad = '1'
-      }
-    },
-    
-    funcionSize(){
-      if(this.small===true){
-        this.size = '.5rem'
-      }if(this.medium===true){
-        this.size = '1.5rem'
-      }
-    }
-  },
-
+  
   computed: {
     rangoBorde(){
       return this.bordeElegido + "px"
+    },
+    esOpaco(){
+      return this.mostrarOpaco ? 0.5:1
+    },
+    letraSize(){
+      switch (this.tamanioLetra){
+        case 'small':
+          return '.5rem';
+        case 'medium':
+          return '1rem';
+        case 'large':
+          return '2rem';
+        default:
+          return '0px';
+      }
+    }, 
+    estiloFuente(){
+      return this.tipografiaElegida;
     }
-  }
+  },
 }
 </script>
 
